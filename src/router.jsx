@@ -4,6 +4,7 @@ import { Users } from "../pages/Users"
 import { Todos } from "../pages/Todos"
 import { Navbar } from "../pages/Navbar"
 import { Post } from "../pages/Post"
+import { User } from "../pages/User"
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +33,29 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      { path: "/users", element: <Users /> },
+      {
+        path: "/users",
+        children: [
+          {
+            index: true,
+            loader: ({ request: { signal } }) => {
+              return fetch("http://localhost:3000/users", { signal })
+            },
+            element: <Users />,
+          },
+          {
+            path: ":id",
+            loader: ({ params, request: { signal } }) => {
+              return fetch(`http://localhost:3000/users/${params.id}`, { signal }).then((res) => {
+                if (res.status === 200) return res.json()
+
+                throw redirect("/posts")
+              })
+            },
+            element: <User />,
+          },
+        ],
+      },
       { path: "/todos", element: <Todos /> },
     ],
   },
