@@ -4,11 +4,11 @@ export function Users() {
   const users = useLoaderData()
 
   return (
-    <div className="container">
+    <>
       <h1 className="page-title">Users</h1>
       <div className="card-grid">
         {users.map((user) => (
-          <div className="card">
+          <div className="card" key={user.id}>
             <div className="card-header">{user.name}</div>
             <div className="card-body">
               <div>{user.company.name}</div>
@@ -23,6 +23,6 @@ export function Users() {
           </div>
         ))}
       </div>
-    </div>
+    </>
   )
 }
